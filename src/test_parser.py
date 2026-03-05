@@ -6,6 +6,8 @@ text = extract_text_from_pdf(pdf_path)
 
 questions = extract_questions(text)
 
-print("Total questions found:", len(questions))
+print("Total questions:", len(questions))
 print()
-print(questions[0]["text"][:500])
+
+for q in questions[:5]:
+    print(q["question_number"], q["question_type"])
