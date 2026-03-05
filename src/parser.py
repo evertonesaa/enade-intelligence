@@ -16,16 +16,6 @@ from typing import List, Dict
 def extract_text_from_pdf(pdf_path: str) -> str:
     """
     Extract raw text from an ENADE PDF.
-
-    Parameters
-    ----------
-    pdf_path : str
-        Path to the PDF file.
-
-    Returns
-    -------
-    str
-        Full extracted text from the document.
     """
 
     text = ""
@@ -35,6 +25,7 @@ def extract_text_from_pdf(pdf_path: str) -> str:
             page_text = page.extract_text()
 
             if page_text:
+                page_text = clean_pdf_artifacts(page_text)
                 text += page_text + "\n"
 
     return text
@@ -52,8 +43,7 @@ def extract_questions(text: str) -> List[Dict]:
     Returns structured question objects.
     """
 
-    # regex robusto para capturar QUESTÃO até o número
-    pattern = r"QUESTÃO[\s\S]{0,25}?\d+"
+    pattern = r"QUESTÃO\s*(Discursiva\s*)?\d+"
 
     matches = list(re.finditer(pattern, text, re.IGNORECASE))
 
@@ -71,7 +61,6 @@ def extract_questions(text: str) -> List[Dict]:
 
         number = int(number_match.group())
 
-        # evita duplicações como "QUESTÃO 01 QUESTÃO 06"
         if number in seen_numbers:
             continue
 
@@ -84,9 +73,8 @@ def extract_questions(text: str) -> List[Dict]:
         else:
             end = len(text)
 
-        question_text = text[start:end].strip()
+        question_text = clean_question_text(text[start:end])
 
-        # identificar tipo
         if re.search(r"discursiva", header, re.IGNORECASE):
             qtype = "DISCURSIVE"
         else:
@@ -98,7 +86,48 @@ def extract_questions(text: str) -> List[Dict]:
             "text": question_text
         })
 
-    # ordenar para garantir sequência correta
     questions = sorted(questions, key=lambda x: x["question_number"])
 
     return questions
+
+
+def clean_question_text(text: str) -> str:
+    """
+    Clean question text by removing headers like:
+
+    QUESTÃO 01
+    QUESTÃO Discursiva 02
+    """
+
+    text = re.sub(r"QUESTÃO\s+(Discursiva\s+)?\d+", "", text, flags=re.IGNORECASE)
+
+    text = re.sub(r"\(cid:\d+\)", " ", text)
+
+    text = re.sub(r"\s+", " ", text)
+
+    return text.strip()
+
+def clean_question_text(text: str) -> str:
+    """
+    Clean extracted ENADE question text.
+
+    Removes headers like:
+    QUESTÃO 10
+    QUESTÃO Discursiva 2
+    """
+
+    text = re.sub(r"QUESTÃO\s+(Discursiva\s+)?\d+", "", text, flags=re.IGNORECASE)
+
+    # remove espaços duplicados
+    text = re.sub(r"\s+", " ", text)
+
+    return text.strip()
+
+def clean_pdf_artifacts(text: str) -> str:
+    """
+    Remove PDF artifacts like (cid:123)
+    """
+
+    text = re.sub(r"\(cid:\d+\)", " ", text)
+
+    return text
