@@ -8,6 +8,7 @@ import pandas as pd
 from src.classifier import classify_question
 from src.bloom import classify_bloom
 from src.parser import clean_question_text
+from src.classifier_ml import classify_ml
 
 
 def run_classification():
@@ -19,10 +20,14 @@ def run_classification():
 
     for text in df["text"]:
 
-        # limpeza do texto antes da classificação
         clean_text = clean_question_text(text)
 
         macro = classify_question(clean_text)
+
+        # fallback para ML se keyword não identificar
+        if macro == "Unknown":
+            macro = classify_ml(clean_text)
+
         bloom = classify_bloom(clean_text)
 
         macro_areas.append(macro)
