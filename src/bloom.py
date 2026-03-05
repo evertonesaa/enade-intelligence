@@ -1,78 +1,52 @@
 """
 ENADE Intelligence
-Bloom Taxonomy Module
-
-Defines cognitive levels used to classify ENADE questions
-according to Bloom's Taxonomy.
+Bloom Taxonomy Classifier
 """
 
-from typing import Dict
+import re
 
 
-BLOOM_LEVELS: Dict[str, dict] = {
-    "Remember": {
-        "description": "Recall basic concepts and facts.",
-        "examples": [
-            "define",
-            "list",
-            "identify",
-            "name",
-            "recall"
-        ]
-    },
+def classify_bloom(text: str) -> str:
+    """
+    Classify question according to Bloom's taxonomy using keyword heuristics.
+    """
 
-    "Understand": {
-        "description": "Explain ideas or concepts.",
-        "examples": [
-            "describe",
-            "explain",
-            "summarize",
-            "interpret",
-            "classify"
-        ]
-    },
+    text = text.lower()
 
-    "Apply": {
-        "description": "Use information in new situations.",
-        "examples": [
-            "calculate",
-            "solve",
-            "use",
-            "demonstrate",
-            "implement"
-        ]
-    },
+    apply_keywords = [
+        "calcule",
+        "determine",
+        "considere",
+        "suponha",
+        "resolva",
+        "obtenha"
+    ]
 
-    "Analyze": {
-        "description": "Draw connections among ideas.",
-        "examples": [
-            "analyze",
-            "compare",
-            "differentiate",
-            "organize",
-            "examine"
-        ]
-    },
+    analyze_keywords = [
+        "analise",
+        "compare",
+        "explique",
+        "discuta",
+        "relacione"
+    ]
 
-    "Evaluate": {
-        "description": "Justify a decision or course of action.",
-        "examples": [
-            "evaluate",
-            "justify",
-            "critique",
-            "defend",
-            "assess"
-        ]
-    },
+    remember_keywords = [
+        "defina",
+        "identifique",
+        "cite",
+        "liste"
+    ]
 
-    "Create": {
-        "description": "Produce new or original work.",
-        "examples": [
-            "design",
-            "construct",
-            "develop",
-            "formulate",
-            "propose"
-        ]
-    }
-}
+    for word in apply_keywords:
+        if re.search(word, text):
+            return "Apply"
+
+    for word in analyze_keywords:
+        if re.search(word, text):
+            return "Analyze"
+
+    for word in remember_keywords:
+        if re.search(word, text):
+            return "Remember"
+
+    return "Understand"

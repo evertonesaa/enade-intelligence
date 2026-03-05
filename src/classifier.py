@@ -1,39 +1,56 @@
-"""
-ENADE Intelligence
-Question Classification Engine
-"""
-
-from src.taxonomy import MACRO_AREAS
-from src.bloom import BLOOM_LEVELS
-
-
-def classify_macro_area(text: str):
+def classify_question(text: str) -> str:
 
     text = text.lower()
 
-    for area, topics in MACRO_AREAS.items():
-        for topic in topics:
-            if topic.lower() in text:
-                return area
+    thermodynamics = [
+        "rankine", "brayton", "enthalpy", "entropy",
+        "thermodynamic", "turbine", "compressor",
+        "boiler", "caldeira", "ciclo", "energia"
+    ]
+
+    transport = [
+        "reynolds", "drag", "fluid", "flow",
+        "viscosity", "pump", "pressure",
+        "escoamento", "fluido", "vazão"
+    ]
+
+    heat_transfer = [
+        "heat transfer", "conduction", "convection",
+        "radiation", "heat exchanger",
+        "transferência de calor"
+    ]
+
+    reaction = [
+        "reactor", "reaction", "kinetics",
+        "equilibrium", "catalyst", "reação"
+    ]
+
+    separations = [
+        "distillation", "column", "adsorption",
+        "membrane", "separation", "destilação"
+    ]
+
+    materials = [
+        "hardness", "machining", "lathe",
+        "tool wear", "alloy", "usinagem"
+    ]
+
+    if any(word in text for word in thermodynamics):
+        return "Thermodynamics"
+
+    if any(word in text for word in transport):
+        return "Transport Phenomena"
+
+    if any(word in text for word in heat_transfer):
+        return "Heat Transfer"
+
+    if any(word in text for word in reaction):
+        return "Reaction Engineering"
+
+    if any(word in text for word in separations):
+        return "Separation Processes"
+
+    if any(word in text for word in materials):
+        return "Materials Engineering"
 
     return "Unknown"
-
-
-def classify_bloom(text: str):
-
-    text = text.lower()
-
-    for level, data in BLOOM_LEVELS.items():
-        for keyword in data["examples"]:
-            if keyword in text:
-                return level
-
-    return "Unknown"
-
-
-def classify_question(question_text: str):
-
-    return {
-        "macro_area": classify_macro_area(question_text),
-        "bloom_level": classify_bloom(question_text)
-    }

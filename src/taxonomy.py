@@ -1,62 +1,74 @@
 """
 ENADE Intelligence
-Taxonomy Module
-
-Defines macro areas and subareas used to classify
-Engineering questions from ENADE exams.
+Engineering Knowledge Taxonomy
 """
 
-from typing import Dict, List
+MACRO_AREAS = {
 
-
-MACRO_AREAS: Dict[str, List[str]] = {
-    "Fenomenos de Transporte": [
-        "Mecanica dos Fluidos",
-        "Transferencia de Calor",
-        "Transferencia de Massa"
+    "Transport Phenomena": [
+        "arrasto",
+        "escoamento",
+        "fluido",
+        "viscosidade",
+        "reynolds",
+        "turbulento",
+        "laminar",
+        "transferência de calor",
+        "condução",
+        "convecção",
+        "difusão",
+        "coeficiente de arrasto"
     ],
 
-    "Operacoes Unitarias": [
-        "Destilacao",
-        "Absorcao",
-        "Extracao",
-        "Filtracao",
-        "Secagem",
-        "Evaporacao",
-        "Peneiramento"
+    "Thermodynamics": [
+        "entalpia",
+        "entropia",
+        "energia",
+        "ciclo",
+        "turbina",
+        "compressor",
+        "primeira lei",
+        "segunda lei",
+        "equilíbrio termodinâmico",
+        "trabalho"
     ],
 
-    "Termodinamica": [
-        "Equilibrio de Fases",
-        "Propriedades Termodinamicas",
-        "Energia Livre"
+    "Unit Operations": [
+        "destilação",
+        "absorção",
+        "extração",
+        "filtração",
+        "secagem",
+        "evaporação",
+        "trocador de calor",
+        "coluna",
+        "separação"
     ],
 
-    "Reatores": [
-        "Cinetica Quimica",
-        "Reatores CSTR",
-        "Reatores PFR"
+    "Reaction Engineering": [
+        "reator",
+        "cinética",
+        "taxa de reação",
+        "ordem de reação",
+        "catalisador",
+        "conversão"
     ],
 
-    "Balancos de Massa e Energia": [
-        "Balanco de Massa",
-        "Balanco de Energia"
+    "Process Control": [
+        "controle",
+        "controlador",
+        "malha de controle",
+        "pid",
+        "estabilidade"
     ],
 
-    "Controle de Processos": [
-        "Instrumentacao",
-        "Controle PID",
-        "Malhas de Controle"
-    ],
-
-    "Engenharia Ambiental": [
-        "Tratamento de Efluentes",
-        "Controle de Emissoes"
-    ],
-
-    "Formacao Geral": [
-        "Etica",
-        "Sociedade",
-        "Impactos Tecnologicos"
+    "Materials Engineering": [
+        "liga",
+        "aço",
+        "tensão",
+        "cisalhamento",
+        "fadiga",
+        "deformação",
+        "módulo de elasticidade"
     ]
 }
